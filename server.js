@@ -13,10 +13,9 @@ app.use(cors())
 
 ConnectDb()
 
-app.get("/",(req,res)=>
-{
-    res.send("Api working")
-})
+app.use("/api",require("./routes/auth"))
+app.use("/api",require("./routes/cart"))
+app.use("/api",require("./routes/orders"))
 app.listen(PORT,()=>
 {
     console.log(`Server is running at http://localhost:${PORT}`)
