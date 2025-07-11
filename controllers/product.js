@@ -12,6 +12,7 @@ exports.addProduct = async (req, res) => {
       category,
       packaging,
       shellLife,
+      subcategory
     } = req.body;
 
     let variants;
@@ -21,7 +22,7 @@ exports.addProduct = async (req, res) => {
       return sendError(res,"Invalid variant format",400,{error:err.message})
     }
 
-    if (!name || !Overview || !description || !category || !variants) {
+    if (!name || !Overview || !description || !category || !variants ||!subcategory) {
       return  sendError(res,"Missing required fields",400)
     }
 
@@ -38,6 +39,7 @@ exports.addProduct = async (req, res) => {
       Overview,
       description,
       category,
+      subcategory,
       packaging,
       shellLife,
       variants,
@@ -59,6 +61,7 @@ exports.addProduct = async (req, res) => {
 exports.getAllProducts=async(req,res)=>
 {
   try {
+    console.log("iam getting api call")
     const products=await getAllProducts()
   if(!products){
     return sendSuccess(res,"No products Available",products,200)

@@ -55,7 +55,9 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-
+  subcategory:{
+    type:String
+  },
   ratings: {
     type: Number,
     default: 0,
