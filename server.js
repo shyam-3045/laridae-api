@@ -19,6 +19,8 @@ app.use("/api",require("./routes/auth"))
 app.use("/api",require("./routes/cart"))
 app.use("/api",require("./routes/orders"))
 app.use("/api",require("./routes/product"))
+app.use("/api",require("./routes/userInfo"))
+
 app.listen(PORT,()=>
 {
     console.log(`Server is running at http://localhost:${PORT}`)

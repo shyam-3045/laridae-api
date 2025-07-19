@@ -5,6 +5,7 @@ const { sendError, sendSuccess } = require("../utils/ApiResponse");
 
 exports.login = async (req, res) => {
   try {
+
     const { email, password } = req.body;
 
     if (!email || !password) {
@@ -76,3 +77,4 @@ exports.signup = async (req, res) => {
     return sendError(res, "Internal Server Error", 500, { error: error.message });
   }
 };
+

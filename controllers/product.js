@@ -61,7 +61,7 @@ exports.addProduct = async (req, res) => {
 exports.getAllProducts=async(req,res)=>
 {
   try {
-    console.log("iam getting api call")
+    
     const products=await getAllProducts()
   if(!products){
     return sendSuccess(res,"No products Available",products,200)
