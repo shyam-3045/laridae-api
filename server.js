@@ -20,6 +20,7 @@ app.use("/api",require("./routes/cart"))
 app.use("/api",require("./routes/orders"))
 app.use("/api",require("./routes/product"))
 app.use("/api",require("./routes/userInfo"))
+app.use("/api",require("./routes/otp"))
 
 app.listen(PORT,()=>
 {
