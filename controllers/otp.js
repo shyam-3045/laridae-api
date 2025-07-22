@@ -19,6 +19,7 @@ const transporter = nodemailer.createTransport({
 exports.sendOtp = async (req, res) => {
   try {
     const { email } = req.body;
+ 
     if (!email) {
       return sendError(res, "Email Reuired", 400);
     }
@@ -32,7 +33,7 @@ exports.sendOtp = async (req, res) => {
       from: process.env.MAIL_USER,
       to: email,
       subject: "Your OTP Code",
-      text: `Your OTP code is ${otp}. It will expire in 5 minutes.`,
+      text: `Your OTP code is ${otp}. It will expire in 1 minutes.`,
     });
 
     return sendSuccess(res, "Otp sent to User", 200);
@@ -46,11 +47,12 @@ exports.sendOtp = async (req, res) => {
 exports.verifyOtp = async (req, res) => {
   try {
     const { email, otp } = req.body;
+
     if (!email || !otp) {
       return sendError(res, "Missing required Credentials", 400);
     }
     const saved = otpStore.get(email);
-    console.log(saved);
+    
     if (!saved) {
       return sendError(res, "No Otp found for this email", 400);
     }
