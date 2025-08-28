@@ -21,6 +21,7 @@ app.use("/api",require("./routes/orders"))
 app.use("/api",require("./routes/product"))
 app.use("/api",require("./routes/userInfo"))
 app.use("/api",require("./routes/otp"))
+app.use("/api",require("./routes/razorPay"))
 
 app.listen(PORT,()=>
 {
