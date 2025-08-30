@@ -27,10 +27,10 @@ const orderSchema = new mongoose.Schema({
     isDefault: { type: Boolean, default: false },
   },
   totalAmount: Number,
-  paymentInfo: {
+  paymentDetails: {
     razorpay_order_id: String,
     razorpay_payment_id: String,
-    razorpay_signature: String,
+    razorpay_signature: String, 
   },
   paymentStatus: { type: String, default: "Pending" },
   paymentInfo:{

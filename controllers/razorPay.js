@@ -1,4 +1,4 @@
-const { sendSuccess } = require("../utils/ApiResponse");
+const { sendSuccess, sendError } = require("../utils/ApiResponse");
 const Razorpay=require("razorpay")
 const crypto=require("crypto")
 
@@ -30,7 +30,9 @@ exports.createOrder= async (req,res)=>
 
 exports.verifyPayement=async (req,res)=>
 {
-      const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+    
+  try {
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
 
   const sign = razorpay_order_id + "|" + razorpay_payment_id;
   const expectedSign = crypto
@@ -42,9 +44,16 @@ exports.verifyPayement=async (req,res)=>
     const response={
       success:true
     }
+    console.log(response)
     return sendSuccess(res,"Verified Success",response,201)
   } else {
+    console.log("something went wrong !?")
     return res.status(400).json({ success: false, message: "Invalid signature" });
+  }
+    
+  } catch (error) {
+    console.log(error)
+    return sendError(res,"Internal Server Error",500)
   }
 }
 
