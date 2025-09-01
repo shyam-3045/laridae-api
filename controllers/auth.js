@@ -74,6 +74,7 @@ exports.signup = async (req, res) => {
 
     return sendSuccess(res, "User created successfully", data, 201);
   } catch (error) {
+    console.error(error)
     return sendError(res, "Internal Server Error", 500, { error: error.message });
   }
 };

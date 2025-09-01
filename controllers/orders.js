@@ -50,7 +50,8 @@ exports.createOrder =async(req,res)=>
       totalAmount,
       paymentDetails,      
       paymentInfo:"COD",
-      orderStatus:"Processing",  
+      orderStatus:"processing", 
+      paymentStatus:"Done", 
       createdAt: new Date(),
     }
     const order = await createOredr(ord)
@@ -59,6 +60,7 @@ exports.createOrder =async(req,res)=>
     return sendSuccess(res,"Order created Sucessfullt",order,201)
 
   } catch (error) {
+    console.error(error)
     return sendError(res, "Server error while creating order", 500);
   }
     
