@@ -65,7 +65,6 @@ exports.webhook=async(req,res)=>
   const digest = shasum.digest("hex");
 
   if (digest === req.headers["x-razorpay-signature"]) {
-    // process event (payment.captured, order.paid, etc.)
     console.log("Webhook verified:", req.body.event);
     return sendSuccess(res,"DONE !",201)
   } else {

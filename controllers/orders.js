@@ -1,6 +1,7 @@
 const { getMyOrder, createOredr } = require("../services/orders")
 const { sendSuccess, sendError } = require("../utils/ApiResponse")
 const User=require("../models/User")
+const Order = require("../models/Orders")
 
 exports.getMyOrders=async(req,res)=>
 {
@@ -25,6 +26,21 @@ exports.getMyOrders=async(req,res)=>
     }
 
 }
+
+exports.getAllOrders=async(req,res)=>
+  {
+    try {
+      const order= await Order.find({})
+      if(!order)
+      {
+        return sendSuccess(res,"No orders",order,201)
+      }
+      return sendSuccess(res,"Orders retrived Successfully",order,201)
+    } catch (error) {
+      return sendError(res,"Internal Server Error",500,{error:error?.message})
+      
+    }
+  } 
 
 
 exports.createOrder =async(req,res)=>
@@ -65,4 +81,27 @@ exports.createOrder =async(req,res)=>
   }
     
 
+}
+
+exports.updateOrder=async(req,res)=>
+{
+  try {
+    const {order_id , status}=req.body
+    
+  if(!order_id || !status)
+  {
+    return sendError(res,"Requires parameters Missing",401)
+  }
+  const order= await Order.findByIdAndUpdate(order_id,{
+    orderStatus:status
+  },
+{
+  new:true
+})
+  return sendSuccess(res,"Order Updated Successfully",order,200)
+    
+  } catch (error) {
+    return sendError(res,"Interal server Error",500,{error:error.message})
+  }
+  
 }
