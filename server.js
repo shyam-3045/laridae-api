@@ -18,13 +18,13 @@ ConnectDb()
 
 let latestCommand = null; 
 
-app.post("/command", (req, res) => {
+app.post("/api/command", (req, res) => {
   latestCommand = req.body; 
   console.log("New Command:", latestCommand);
   res.json({ status: "ok" });
 });
 
-app.get("/command", (req, res) => {
+app.get("/api/command", (req, res) => {
   if (latestCommand) {
     res.json({
         servo :latestCommand.status,
