@@ -15,6 +15,25 @@ app.use(cors())
 
 ConnectDb()
 
+
+let latestCommand = null; 
+
+app.post("/command", (req, res) => {
+  latestCommand = req.body; 
+  console.log("New Command:", latestCommand);
+  res.json({ status: "ok" });
+});
+
+app.get("/command", (req, res) => {
+  if (latestCommand) {
+    res.json(latestCommand);
+    latestCommand = null; 
+  } else {
+    res.json({ message: "no-command" });
+  }
+});
+
+
 app.use("/api",require("./routes/auth"))
 app.use("/api",require("./routes/cart"))
 app.use("/api",require("./routes/orders"))
