@@ -26,7 +26,10 @@ app.post("/command", (req, res) => {
 
 app.get("/command", (req, res) => {
   if (latestCommand) {
-    res.json(latestCommand);
+    res.json({
+        servo :latestCommand.status,
+        angle:90
+    });
     latestCommand = null; 
   } else {
     res.json({ message: "no-command" });
