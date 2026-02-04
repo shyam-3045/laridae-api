@@ -15,6 +15,7 @@ app.use(cors())
 
 ConnectDb()
 
+
 app.use("/api",require("./routes/auth"))
 app.use("/api",require("./routes/cart"))
 app.use("/api",require("./routes/orders"))

@@ -22,9 +22,15 @@ exports.addProduct = async (req, res) => {
       return sendError(res,"Invalid variant format",400,{error:err.message})
     }
 
-    if (!name || !Overview || !description || !category || !variants ||!subcategory) {
-      return  sendError(res,"Missing required fields",400)
+    if (!name || !Overview ) {
+      return  sendError(res,"Missing required fields 1",400)
     }
+    if (!description || !category ) {
+      return  sendError(res,"Missing required fields 2",400)
+    }if (!variants ||!subcategory) {
+      return  sendError(res,"Missing required fields 3",400)
+    }
+
 
     if (!req.files || !req.files.image) {
      return sendError(res,"Image is required",400)
@@ -55,8 +61,33 @@ exports.addProduct = async (req, res) => {
   } catch (error) {
     return sendError(res,"Internal server error",500,{error:error.message})
   }
-};
+}
 
+exports.addproductImage = async(req,res)=>
+{
+  try {
+    const {product_id}=req.body
+    if(!product_id || !req.files || ! req.files.image)
+    {
+      return sendSuccess(res,"required Details missing",400)
+    }
+    const product = await Product.findById(product_id)
+    const file = req.files.image;
+    const uploadedImage = await uploadToCloudinary(file.tempFilePath);
+    const url=uploadedImage.url
+
+    const newImage = {
+          public_id:uploadedImage.public_id,
+          url,
+        }
+    product.images.push(newImage)
+    await product.save()
+    return sendSuccess(res,"Image added !",newImage,200)
+      
+  } catch (error) {
+    return sendError(res, "Internal server Error",500,error.message)
+  }
+}
 
 exports.getAllProducts=async(req,res)=>
 {
