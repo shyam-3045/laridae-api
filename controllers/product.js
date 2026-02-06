@@ -60,6 +60,8 @@ exports.addProduct = async (req, res) => {
       variants,
       shopFlag,
       isAvailable,
+      numOfReviews,
+      ratings,
       MAX,
       MOQ,
       images: [
