@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const productSchema = new mongoose.Schema({
   name: {
@@ -19,7 +19,16 @@ const productSchema = new mongoose.Schema({
     {
       weight: {
         type: String,
-        enum: ["250 g","1 kg", "5 kg","30 kg","200 g","10 kg","50 kg","50 g"],
+        enum: [
+          "250 g",
+          "1 kg",
+          "5 kg",
+          "30 kg",
+          "200 g",
+          "10 kg",
+          "50 kg",
+          "50 g",
+        ],
         required: true,
       },
       stock: {
@@ -34,8 +43,8 @@ const productSchema = new mongoose.Schema({
       discountedPrice: {
         type: Number,
         required: true,
-      }
-    }
+      },
+    },
   ],
 
   images: [
@@ -47,16 +56,16 @@ const productSchema = new mongoose.Schema({
       url: {
         type: String,
         required: true,
-      }
-    }
+      },
+    },
   ],
 
   category: {
     type: String,
     required: true,
   },
-  subcategory:{
-    type:String
+  subcategory: {
+    type: String,
   },
   ratings: {
     type: Number,
@@ -86,22 +95,41 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true,
       },
-    }
+    },
   ],
 
   packaging: {
     type: String,
-    default: "Sealed foil Pouch"
+    default: "Sealed foil Pouch",
   },
   shellLife: {
     type: String,
-    default: "12 months from packaging date"
+    default: "12 months from packaging date",
+  },
+  MAX: {
+    type: Number,
+    required: true,
+  },
+
+  MOQ: {
+    type: Number,
+    required: true,
+  },
+
+  shopFlag: {
+    type: Number,
+    required: true,
+  },
+
+  isAvailable: {
+    type: Boolean,
+    required: true,
   },
 
   createdAt: {
     type: Date,
     default: Date.now,
-  }
+  },
 });
 
 module.exports = mongoose.model("Product", productSchema);
