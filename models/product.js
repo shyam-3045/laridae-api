@@ -83,7 +83,7 @@ const productSchema = new mongoose.Schema({
         ref: "User",
         required: true,
       },
-      email: {
+      phone: {
         type: String,
         required: true,
       },

@@ -6,13 +6,14 @@ const { sendError, sendSuccess } = require("../utils/ApiResponse");
 exports.login = async (req, res) => {
   try {
 
-    const { email, password } = req.body;
+    const { phone, password } = req.body;
+    console.log("req received")
 
-    if (!email || !password) {
-      return sendError(res, "Email and Password are required", 400);
+    if (!phone || !password) {
+      return sendError(res, "Phone and Password are required", 400);
     }
 
-    const user = await userExists(email);
+    const user = await userExists(phone);
     if (!user) {
       return sendError(res, "User does not exist", 404);
     }
@@ -44,19 +45,19 @@ exports.login = async (req, res) => {
 
 exports.signup = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, phone, password } = req.body;
 
-    if (!email || !password || !name) {
+    if (!phone || !password || !name) {
       return sendError(res, "All fields are required", 400);
     }
 
-    const user = await userExists(email);
+    const user = await userExists(phone);
     if (user) {
       return sendError(res, "User already exists", 409);
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const createdUser = await newUser(name, email, hashedPassword);
+    const createdUser = await newUser(name, phone, hashedPassword);
 
     const token = jwt.sign(
       {

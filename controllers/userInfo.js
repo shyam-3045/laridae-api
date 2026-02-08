@@ -20,10 +20,13 @@ const isAddressDuplicate = (userData) => {
 exports.addUserDetails = async (req, res) => {
   try {
     const { userData, userDet } = req.body;
+    console.log(userData)
+    console.log(userDet)
     const userDetails = JSON.parse(userDet);
-    const userEmail = userDetails.state.data.user;
+    console.log(userDet)
+    const phone = userDetails.state.data.user;
 
-    const user = await User.findOne({ email: userEmail });
+    const user = await User.findOne({ phone: phone });
     if (!user) {
       return sendError(res, "User Not Found", 401);
     }
