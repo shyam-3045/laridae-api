@@ -12,6 +12,8 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@upstash/redis": "^1.36.2",
+    "axios": "^1.13.4",
     "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.2",
     "cloudinary": "^2.7.0",
@@ -20,11 +22,14 @@
     "dotenv": "^17.0.0",
     "express": "^5.1.0",
     "express-fileupload": "^1.5.1",
+    "install": "^0.13.0",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.17.0",
     "mongoose": "^8.16.1",
     "nodemailer": "^7.0.5",
     "razorpay": "^2.9.6",
+    "redis": "^5.10.0",
+    "twilio": "^5.12.1",
     "zod": "^3.25.67"
   },
   "devDependencies": {

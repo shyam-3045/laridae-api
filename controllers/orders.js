@@ -6,8 +6,8 @@ const Order = require("../models/Orders")
 exports.getMyOrders=async(req,res)=>
 {
     try {
-        const {email}=req.body
-        const det = await User.findOne({ email: email });
+        const {phone}=req.body
+        const det = await User.findOne({ phone: phone });
     if (!det) {
       return sendError(res, "User not found", 404);
     }
@@ -46,13 +46,14 @@ exports.getAllOrders=async(req,res)=>
 exports.createOrder =async(req,res)=>
 {
      try {
-    const { email, products, deliveryDetails, totalAmount, paymentDetails } = req.body;
+    const { phone, products, deliveryDetails, totalAmount, paymentDetails } = req.body;
+    console.log(req.body)
 
-    if (!email || !products || !deliveryDetails || !totalAmount || !paymentDetails) {
+    if (!phone || !products || !deliveryDetails || !totalAmount || !paymentDetails) {
       return sendError(res, "Required Credentials Missing", 400);
     }
 
-    const det = await User.findOne({ email: email });
+    const det = await User.findOne({ phone: phone });
     if (!det) {
       return sendError(res, "User not found", 404);
     }
