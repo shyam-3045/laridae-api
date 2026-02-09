@@ -7,7 +7,7 @@ const twilio = require("twilio")(
 );
 const crypto = require("crypto");
 
-const OTP_TTL = 120;
+const OTP_TTL = 300;
 
 // const otpStore = new Map();
 // const generateOTP = () =>
@@ -90,7 +90,12 @@ exports.sendSms = async (req, res) => {
     const senderPhone = "+91" + phone;
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     const key = `otp:${phone}`;
-    const msg = await twilio.messages.create({
+    const isOtpExistes = await redis.get(key)
+    if(isOtpExistes)
+    {
+      await redis.del(key)
+    }
+    await twilio.messages.create({
       body : `OTP to Login Laridae: ${otp}`,
       from: '+19564742640',
       to: senderPhone
@@ -99,7 +104,6 @@ exports.sendSms = async (req, res) => {
     await redis.set(key, hashedOtp, {
       ex: OTP_TTL,
     });
-    console.log("redis setted");
     return sendSuccess(res, "Otp Sent Successfully", 200);
   } catch (error) {
     return sendError(res, "Internal server Error", 500, {
@@ -113,7 +117,6 @@ exports.verifyOtp = async (req, res) => {
     const { phone, otp } = req.body;
     const key = `otp:${phone}`;
     const getHashedotp = await redis.get(key);
-    console.log(getHashedotp)
 
     if (!getHashedotp) {
       return sendError(res, "OTP expired", 400);
