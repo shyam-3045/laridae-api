@@ -24,6 +24,9 @@ const orderSchema = new mongoose.Schema({
     mobile: { type: String },
     city: { type: String },
     state: { type: String },
+    deliveryMode:{
+      type: String
+    },
     isDefault: { type: Boolean, default: false },
   },
   totalAmount: Number,
