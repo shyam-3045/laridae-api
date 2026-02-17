@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema({
     password: { type: String, required: true },
     deliveryDetails: [deliveryDetailSchema],
     isAdmin: { type: Boolean, default: false },
-    availFirstDiscount:{type:Boolean,default:false}
+    availFirstDiscount:{type:Boolean,default:true}
 }, { timestamps: true });
 
 module.exports = mongoose.model('User', userSchema);

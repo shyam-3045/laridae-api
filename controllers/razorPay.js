@@ -14,7 +14,7 @@ exports.createOrder= async (req,res)=>
     const { amount, currency = "INR", receipt } = req.body;
 
     const options = {
-      amount: amount * 100,  
+      amount: Math.round(amount * 100),  
       currency,
       receipt: receipt || `rcpt_${Date.now()}`,
     };
