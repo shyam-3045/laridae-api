@@ -20,10 +20,7 @@ const isAddressDuplicate = (userData) => {
 exports.addUserDetails = async (req, res) => {
   try {
     const { userData, userDet } = req.body;
-    console.log(userData)
-    console.log(userDet)
     const userDetails = JSON.parse(userDet);
-    console.log(userDet)
     const phone = userDetails.state.data.user;
 
     const user = await User.findOne({ phone: phone });
@@ -33,7 +30,7 @@ exports.addUserDetails = async (req, res) => {
 
     if (userData.setAsDefault) {
       const defaultAddIndex = user.deliveryDetails.findIndex(
-        (det) => det.isDefault === true
+        (det) => det.isDefault === true,
       );
       if (defaultAddIndex !== -1) {
         user.deliveryDetails[defaultAddIndex].isDefault = false;
@@ -59,3 +56,52 @@ exports.addUserDetails = async (req, res) => {
     });
   }
 };
+
+exports.editUserDetails = async (req,res) => {
+  try {
+    const { userData, userDet } = req.body;
+    const userDetails = JSON.parse(userDet);
+    const phone = userDetails.state.data.user;
+
+    const user = await User.findOne({ phone: phone });
+    if (!user) {
+      return sendError(res, "User Not Found", 401);
+    }
+    user.availFirstDiscount = userData.availFirstDiscount
+    await user.save();
+    return sendSuccess(res, "Address added successfully!", userData, 200);
+  } catch (error) {
+    console.log(error.message);
+    return sendError(res, "Internal Server Error", 500, {
+      error: error.message,
+    });
+  }
+};
+
+exports.getUserDetails=async(req,res)=>
+{
+  try {
+    const {Userdata,code}=req.body
+    const userDetails = JSON.parse(Userdata);
+    const phone = userDetails.state.data.user;
+    const user = await User.findOne({ phone: phone });
+    if (!user) {
+      return sendError(res, "User Not Found", 401);
+    }
+    const data = {
+      user,
+    };
+
+    if(code == process.env.CODE)
+    {
+      return sendSuccess(res, "Login successful", data, 200);
+    }
+    return sendError(res, "unauthorized ", 401);
+
+  } catch (error) {
+    console.log(error.message);
+    return sendError(res, "Internal Server Error", 500, {
+      error: error.message,
+    });
+  }
+}
