@@ -105,3 +105,15 @@ exports.getUserDetails=async(req,res)=>
     });
   }
 }
+
+exports.getAlluserdetails=async()=>
+{
+  try {
+    
+  } catch (error) {
+    console.log(error.message);
+    return sendError(res, "Internal Server Error", 500, {
+      error: error.message,
+    });
+  }
+}

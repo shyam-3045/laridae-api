@@ -1,5 +1,8 @@
 const Product = require("../models/product");
-const { uploadToCloudinary } = require("../services/cloudinaryUpload");
+const {
+  uploadToCloudinary,
+  deleteFromCloudinary,
+} = require("../services/cloudinaryUpload");
 const { getAllProducts } = require("../services/product");
 const { sendError, sendSuccess } = require("../utils/ApiResponse");
 
@@ -127,7 +130,7 @@ exports.deleteProduct = async (req, res) => {
     if (!productId) {
       return sendError(res, "Product id is required", 400);
     }
-    const product = await Product.findByIdAndDelete(productId)
+    const product = await Product.findByIdAndDelete(productId);
     return sendSuccess(res, "Product deleted successfully", product, 200);
   } catch (error) {
     return sendError(res, "Internal Server Error", 500, {
@@ -166,8 +169,6 @@ exports.editProducts = async (req, res) => {
       numOfReviews,
     } = req.body;
 
-    
-
     let variants = [];
 
     Object.keys(req.body).forEach((key) => {
@@ -195,21 +196,15 @@ exports.editProducts = async (req, res) => {
       }));
     }
 
-    
-
     if (req.files && req.files.image) {
-
       if (product.images && product.images.length > 0) {
-        await cloudinary.uploader.destroy(
-          product.images[0].public_id
-        );
+        await deleteFromCloudinary(product.images[0].public_id);
+
       }
 
       const file = req.files.image;
 
-      const uploadedImage = await uploadToCloudinary(
-        file.tempFilePath
-      );
+      const uploadedImage = await uploadToCloudinary(file.tempFilePath);
 
       product.images = [
         {
@@ -219,8 +214,6 @@ exports.editProducts = async (req, res) => {
       ];
     }
 
-
-
     if (name != null) product.name = name;
     if (Overview != null) product.Overview = Overview;
     if (description != null) product.description = description;
@@ -229,35 +222,21 @@ exports.editProducts = async (req, res) => {
     if (packaging != null) product.packaging = packaging;
     if (shellLife != null) product.shellLife = shellLife;
 
-    if (isAvailable != null)
-      product.isAvailable = isAvailable === "true";
+    if (isAvailable != null) product.isAvailable = isAvailable === "true";
 
-    if (MOQ != null)
-      product.MOQ = Number(MOQ);
+    if (MOQ != null) product.MOQ = Number(MOQ);
 
-    if (MAX != null)
-      product.MAX = Number(MAX);
+    if (MAX != null) product.MAX = Number(MAX);
 
-    if (shopFlag != null)
-      product.shopFlag = Number(shopFlag);
+    if (shopFlag != null) product.shopFlag = Number(shopFlag);
 
-    if (ratings != null)
-      product.ratings = Number(ratings);
+    if (ratings != null) product.ratings = Number(ratings);
 
-    if (numOfReviews != null)
-      product.numOfReviews = Number(numOfReviews);
-
-
+    if (numOfReviews != null) product.numOfReviews = Number(numOfReviews);
 
     await product.save();
 
-    return sendSuccess(
-      res,
-      "Product updated successfully",
-      product,
-      200
-    );
-
+    return sendSuccess(res, "Product updated successfully", product, 200);
   } catch (error) {
     return sendError(res, "Internal Server Error", 500, {
       error: error.message,
