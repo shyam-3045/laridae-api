@@ -209,7 +209,6 @@ exports.editProducts = async (req, res) => {
     }
 
     if (req.files && req.files.image) {
-      // delete old image
       if (product.images && product.images.length > 0) {
         await deleteFromCloudinary(product.images[0].public_id);
       }
