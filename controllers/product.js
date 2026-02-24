@@ -171,6 +171,16 @@ exports.editProducts = async (req, res) => {
 
     let variants = [];
 
+    if (req.body.variants) {
+      try {
+        const parsed = JSON.parse(req.body.variants);
+
+        variants = Array.isArray(parsed) ? parsed : [parsed];
+      } catch (err) {
+        return sendError(res, "Invalid variants JSON format", 400);
+      }
+    }
+
     Object.keys(req.body).forEach((key) => {
       const match = key.match(/^variants\[(\d+)\]\[(.+)\]$/);
 
@@ -178,9 +188,7 @@ exports.editProducts = async (req, res) => {
         const index = match[1];
         const field = match[2];
 
-        if (!variants[index]) {
-          variants[index] = {};
-        }
+        if (!variants[index]) variants[index] = {};
 
         variants[index][field] = req.body[key];
       }
@@ -189,9 +197,13 @@ exports.editProducts = async (req, res) => {
     if (variants.length > 0) {
       product.variants = variants.map((v) => ({
         weight: v.weight,
+
         stock: Number(v.stock),
+
         price: Number(v.price),
+
         discountedPrice: Number(v.discountedPrice),
+
         _id: v._id,
       }));
     }
@@ -199,7 +211,6 @@ exports.editProducts = async (req, res) => {
     if (req.files && req.files.image) {
       if (product.images && product.images.length > 0) {
         await deleteFromCloudinary(product.images[0].public_id);
-
       }
 
       const file = req.files.image;
@@ -215,11 +226,17 @@ exports.editProducts = async (req, res) => {
     }
 
     if (name != null) product.name = name;
+
     if (Overview != null) product.Overview = Overview;
+
     if (description != null) product.description = description;
+
     if (category != null) product.category = category;
+
     if (subcategory != null) product.subcategory = subcategory;
+
     if (packaging != null) product.packaging = packaging;
+
     if (shellLife != null) product.shellLife = shellLife;
 
     if (isAvailable != null) product.isAvailable = isAvailable === "true";
