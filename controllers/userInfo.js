@@ -1,5 +1,6 @@
 const { sendError, sendSuccess } = require("../utils/ApiResponse");
 const User = require("../models/User");
+const Order = require("../models/Orders")
 
 const isAddressDuplicate = (userData) => {
   const normalize = (str) =>
@@ -106,10 +107,23 @@ exports.getUserDetails=async(req,res)=>
   }
 }
 
-exports.getAlluserdetails=async()=>
+exports.getAlluserdetails=async(req,res)=>
 {
   try {
-    
+    const users = await User.find()
+      .select("-password -isAdmin")
+      .lean();
+
+    const formattedUsers = users.map(user => {
+      return {
+        ...user,
+        deliveryDetails: user.deliveryDetails.filter(
+          d => d.isDefault === true
+        )
+      };
+    });
+
+    return sendSuccess(res, "Details fetched Done !", formattedUsers, 200);
   } catch (error) {
     console.log(error.message);
     return sendError(res, "Internal Server Error", 500, {
@@ -117,3 +131,28 @@ exports.getAlluserdetails=async()=>
     });
   }
 }
+
+exports.getUserOrders = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const orders = await Order.find({ user: userId })
+      .select("-paymentDetails")
+      .populate({
+        path: "user",
+        select: "name phone" 
+      })
+      .lean();
+
+  
+
+    
+    return sendSuccess(res, "User Orders Details fetched Done !", orders, 200); 
+
+  } catch (error) {
+    console.log(error.message);
+    return sendError(res, "Internal Server Error", 500, {
+      error: error.message,
+    });
+  }
+};
