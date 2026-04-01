@@ -1,6 +1,6 @@
 const { sendError, sendSuccess } = require("../utils/ApiResponse");
 const User = require("../models/User");
-const Order = require("../models/Orders")
+const Order = require("../models/Orders");
 
 const isAddressDuplicate = (userData) => {
   const normalize = (str) =>
@@ -58,7 +58,7 @@ exports.addUserDetails = async (req, res) => {
   }
 };
 
-exports.editUserDetails = async (req,res) => {
+exports.editUserDetails = async (req, res) => {
   try {
     const { userData, userDet } = req.body;
     const userDetails = JSON.parse(userDet);
@@ -68,7 +68,7 @@ exports.editUserDetails = async (req,res) => {
     if (!user) {
       return sendError(res, "User Not Found", 401);
     }
-    user.availFirstDiscount = userData.availFirstDiscount
+    user.availFirstDiscount = userData.availFirstDiscount;
     await user.save();
     return sendSuccess(res, "Address added successfully!", userData, 200);
   } catch (error) {
@@ -79,10 +79,9 @@ exports.editUserDetails = async (req,res) => {
   }
 };
 
-exports.getUserDetails=async(req,res)=>
-{
+exports.getUserDetails = async (req, res) => {
   try {
-    const {Userdata,code}=req.body
+    const { Userdata, code } = req.body;
     const userDetails = JSON.parse(Userdata);
     const phone = userDetails.state.data.user;
     const user = await User.findOne({ phone: phone });
@@ -93,33 +92,34 @@ exports.getUserDetails=async(req,res)=>
       user,
     };
 
-    if(code == process.env.CODE)
-    {
+    if (code == process.env.CODE) {
       return sendSuccess(res, "Login successful", data, 200);
     }
     return sendError(res, "unauthorized ", 401);
-
   } catch (error) {
     console.log(error.message);
     return sendError(res, "Internal Server Error", 500, {
       error: error.message,
     });
   }
-}
+};
 
-exports.getAlluserdetails=async(req,res)=>
-{
+exports.getAlluserdetails = async (req, res) => {
   try {
-    const users = await User.find()
-      .select("-password -isAdmin")
-      .lean();
+    const users = await User.find().select("-password -isAdmin").lean();
 
-    const formattedUsers = users.map(user => {
+    const formattedUsers = users.map((user) => {
+      console.log(user.deliveryDetails);
+
+      const defaultAddress = user.deliveryDetails.find((d) => d.isDefault);
+
       return {
         ...user,
-        deliveryDetails: user.deliveryDetails.filter(
-          d => d.isDefault === true
-        )
+        deliveryDetails: defaultAddress
+          ? [defaultAddress]
+          : user.deliveryDetails.length > 0
+            ? [user.deliveryDetails[0]]
+            : [],
       };
     });
 
@@ -130,7 +130,7 @@ exports.getAlluserdetails=async(req,res)=>
       error: error.message,
     });
   }
-}
+};
 
 exports.getUserOrders = async (req, res) => {
   try {
@@ -140,15 +140,11 @@ exports.getUserOrders = async (req, res) => {
       .select("-paymentDetails")
       .populate({
         path: "user",
-        select: "name phone" 
+        select: "name phone",
       })
       .lean();
 
-  
-
-    
-    return sendSuccess(res, "User Orders Details fetched Done !", orders, 200); 
-
+    return sendSuccess(res, "User Orders Details fetched Done !", orders, 200);
   } catch (error) {
     console.log(error.message);
     return sendError(res, "Internal Server Error", 500, {
