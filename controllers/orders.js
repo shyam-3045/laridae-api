@@ -20,7 +20,7 @@ exports.getMyOrders=async(req,res)=>
     }
     return sendSuccess(res,"Orders",order,200)
     } catch (error) {
-        console.error(error)
+        
         return sendError(res,"Internal server error",500,{error:error.message})
         
     }
@@ -47,7 +47,7 @@ exports.createOrder =async(req,res)=>
 {
      try {
     const { phone, products, deliveryDetails, totalAmount, paymentDetails } = req.body;
-    console.log(req.body)
+    
 
     if (!phone || !products || !deliveryDetails || !totalAmount || !paymentDetails) {
       return sendError(res, "Required Credentials Missing", 400);
@@ -77,7 +77,7 @@ exports.createOrder =async(req,res)=>
     return sendSuccess(res,"Order created Sucessfullt",order,201)
 
   } catch (error) {
-    console.error(error)
+    
     return sendError(res, "Server error while creating order", 500);
   }
     

@@ -51,7 +51,7 @@ exports.addUserDetails = async (req, res) => {
 
     return sendSuccess(res, "Address added successfully!", userData, 200);
   } catch (error) {
-    console.log(error.message);
+    
     return sendError(res, "Internal Server Error", 500, {
       error: error.message,
     });
@@ -72,7 +72,7 @@ exports.editUserDetails = async (req, res) => {
     await user.save();
     return sendSuccess(res, "Address added successfully!", userData, 200);
   } catch (error) {
-    console.log(error.message);
+    
     return sendError(res, "Internal Server Error", 500, {
       error: error.message,
     });
@@ -97,7 +97,7 @@ exports.getUserDetails = async (req, res) => {
     }
     return sendError(res, "unauthorized ", 401);
   } catch (error) {
-    console.log(error.message);
+    
     return sendError(res, "Internal Server Error", 500, {
       error: error.message,
     });
@@ -109,7 +109,7 @@ exports.getAlluserdetails = async (req, res) => {
     const users = await User.find().select("-password -isAdmin").lean();
 
     const formattedUsers = users.map((user) => {
-      console.log(user.deliveryDetails);
+      
 
       const defaultAddress = user.deliveryDetails.find((d) => d.isDefault);
 
@@ -125,7 +125,7 @@ exports.getAlluserdetails = async (req, res) => {
 
     return sendSuccess(res, "Details fetched Done !", formattedUsers, 200);
   } catch (error) {
-    console.log(error.message);
+    
     return sendError(res, "Internal Server Error", 500, {
       error: error.message,
     });
@@ -146,7 +146,7 @@ exports.getUserOrders = async (req, res) => {
 
     return sendSuccess(res, "User Orders Details fetched Done !", orders, 200);
   } catch (error) {
-    console.log(error.message);
+    
     return sendError(res, "Internal Server Error", 500, {
       error: error.message,
     });
