@@ -5,9 +5,10 @@ const { sendError, sendSuccess } = require("../utils/ApiResponse");
 
 exports.login = async (req, res) => {
   try {
+    const { phone, password, isAdminLogin } = req.body;
+    console.log(req.body)
 
-    const { phone, password } = req.body;
-    console.log("req received")
+    
 
     if (!phone || !password) {
       return sendError(res, "Phone and Password are required", 400);
@@ -23,14 +24,19 @@ exports.login = async (req, res) => {
       return sendError(res, "Incorrect password", 401);
     }
 
+    if (isAdminLogin && !user.isAdmin) {
+      return sendError(res, "Admin access only", 403);
+    }
     const token = jwt.sign(
       {
         name: user.name,
         id: user._id,
+        isAdmin: user.isAdmin,
       },
       process.env.JWT_SECRET,
-      { expiresIn: "2h" }
+      { expiresIn: "2h" },
     );
+    
 
     const data = {
       token,
@@ -39,7 +45,9 @@ exports.login = async (req, res) => {
 
     return sendSuccess(res, "Login successful", data, 200);
   } catch (error) {
-    return sendError(res, "Internal Server Error", 500, { error: error.message });
+    return sendError(res, "Internal Server Error", 500, {
+      error: error.message,
+    });
   }
 };
 
@@ -65,8 +73,10 @@ exports.signup = async (req, res) => {
         id: createdUser._id,
       },
       process.env.JWT_SECRET,
-      { expiresIn: "2h" }
+      { expiresIn: "2h" },
     );
+
+    
 
     const data = {
       token,
@@ -75,8 +85,8 @@ exports.signup = async (req, res) => {
 
     return sendSuccess(res, "User created successfully", data, 201);
   } catch (error) {
-    console.error(error)
-    return sendError(res, "Internal Server Error", 500, { error: error.message });
+    return sendError(res, "Internal Server Error", 500, {
+      error: error.message,
+    });
   }
 };
-

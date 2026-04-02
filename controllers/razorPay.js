@@ -23,7 +23,7 @@ exports.createOrder= async (req,res)=>
     
     return sendSuccess(res,"Payment Done Sucessfully",order,201)
   } catch (err) {
-    console.error("Order error:", err);
+    
     res.status(500).json({ error: "Order creation failed" });
   }
 }
@@ -44,15 +44,15 @@ exports.verifyPayement=async (req,res)=>
     const response={
       success:true
     }
-    console.log(response)
+    
     return sendSuccess(res,"Verified Success",response,201)
   } else {
-    console.log("something went wrong !?")
+    
     return res.status(400).json({ success: false, message: "Invalid signature" });
   }
     
   } catch (error) {
-    console.log(error)
+    
     return sendError(res,"Internal Server Error",500)
   }
 }
@@ -65,7 +65,6 @@ exports.webhook=async(req,res)=>
   const digest = shasum.digest("hex");
 
   if (digest === req.headers["x-razorpay-signature"]) {
-    console.log("Webhook verified:", req.body.event);
     return sendSuccess(res,"DONE !",201)
   } else {
     res.status(400).json({ status: "invalid signature" });
