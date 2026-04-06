@@ -87,6 +87,7 @@ const OTP_TTL = 300;
 exports.sendSms = async (req, res) => {
   try {
     const { phone } = req.body;
+    console.log("api hit",phone)
     const senderPhone = "+91" + phone;
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     const key = `otp:${phone}`;
@@ -97,15 +98,17 @@ exports.sendSms = async (req, res) => {
     }
     await twilio.messages.create({
       body : `OTP to Login Laridae: ${otp}`,
-      from: '+19564742640',
+      from: '+918300350995',
       to: senderPhone
     })
+    console.log("otp sent ")
     const hashedOtp = crypto.createHash("sha256").update(otp).digest("hex");
     await redis.set(key, hashedOtp, {
       ex: OTP_TTL,
     });
     return sendSuccess(res, "Otp Sent Successfully", 200);
   } catch (error) {
+    console.log("error",error)
     return sendError(res, "Internal server Error", 500, {
       error: error.message,
     });
