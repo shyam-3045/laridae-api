@@ -112,6 +112,7 @@ exports.addproductImage = async (req, res) => {
 
 exports.getAllProducts = async (req, res) => {
   try {
+
     const products = await getAllProducts();
     if (!products) {
       return sendSuccess(res, "No products Available", products, 200);
