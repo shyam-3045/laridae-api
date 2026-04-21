@@ -28,7 +28,7 @@ const productSchema = new mongoose.Schema({
           "10 kg",
           "50 kg",
           "100 g",
-          "160 g"
+          "160 g",
           "50 g",
         ],
         required: true,
