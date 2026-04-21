@@ -57,6 +57,7 @@ exports.addProduct = async (req, res) => {
     const file = req.files.image;
     const uploadedImage = await uploadToCloudinary(file.tempFilePath);
     const url = uploadedImage.url;
+    console.log(variants)
     const product = await Product.create({
       name,
       Overview,
